@@ -1,6 +1,6 @@
 {
   "name": "@aiostreams/parser",
-  "version": "1.19.4",
+  "version": "1.21.1",
   "main": "./dist/index.js",
   "scripts": {
     "test": "vitest run --passWithNoTests",

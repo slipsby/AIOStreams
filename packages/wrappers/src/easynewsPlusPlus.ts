@@ -22,10 +22,10 @@ export class EasynewsPlusPlus extends BaseWrapper {
       url,
       addonId,
       userConfig,
-      indexerTimeout || Settings.DEFAULT_EASYNEWS_PLUS_PLUS_TIMEMOUT,
-      {
-        'User-Agent': Settings.DEFAULT_EASYNEWS_PLUS_PLUS_USER_AGENT,
-      }
+      indexerTimeout || Settings.DEFAULT_EASYNEWS_PLUS_PLUS_TIMEOUT,
+      Settings.DEFAULT_EASYNEWS_PLUS_PLUS_USER_AGENT
+        ? { 'User-Agent': Settings.DEFAULT_EASYNEWS_PLUS_PLUS_USER_AGENT }
+        : undefined
     );
   }
 
@@ -57,6 +57,9 @@ const getEasynewsPlusPlusConfigString = (
     showQualities: '4k,1080p,720p,480p',
     maxResultsPerQuality: '',
     maxFileSize: '',
+    baseUrl: (
+      Settings.EASYNEWS_PLUS_PLUS_PUBLIC_URL || Settings.EASYNEWS_PLUS_PLUS_URL
+    ).replace(/\/$/, ''),
   };
   return encodeURIComponent(JSON.stringify(options));
 };
@@ -83,10 +86,10 @@ export async function getEasynewsPlusPlusStreams(
   if (!credentails || !credentails.username || !credentails.password) {
     throw new Error('Easynews credentials not found');
   }
-
   const easynewsPlusConfigString = getEasynewsPlusPlusConfigString(
     credentails.username,
-    credentails.password
+    credentails.password,
+    easynewsPlusOptions.strictTitleMatching
   );
 
   const easynews = new EasynewsPlusPlus(
